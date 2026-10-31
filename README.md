@@ -1,5 +1,12 @@
 # 🔥 Algorithm Complexity Heatmap Analyzer
 
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/Frontend-React%2019-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind%20CSS%20v4-38B2AC?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Scikit-Learn](https://img.shields.io/badge/ML-Scikit--Learn-F7931E?logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
+[![Google Gemini](https://img.shields.io/badge/AI-Google%20Gemini-8E75C2?logo=google&logoColor=white)](https://ai.google.dev/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 An interactive full-stack benchmarking, visualization, and AI-driven complexity analysis platform for Design and Analysis of Algorithms (DAA). Benchmark algorithms in real-time across custom input sizes and dataset distributions, generate visual performance heatmaps, predict asymptotic Big-O bounds with machine learning regression, and receive educational insights powered by Google Gemini.
 
 ---
@@ -194,6 +201,13 @@ algorithm-heatmap-analyzer/
 ├── .gitignore                     # Git ignore rules for root, backend, and frontend
 └── README.md                      # Comprehensive project documentation
 ```
+
+---
+
+## 👨‍💻 Author
+
+**Arnav Bansal**
+- GitHub: [@arnav-bansal-20](https://github.com/arnav-bansal-20)
 
 ---
 
