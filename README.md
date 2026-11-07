@@ -1,216 +1,216 @@
-# 🔥 Algorithm Complexity Heatmap Analyzer
+# 🎓 Student Algorithm Analyzer & Intelligent Comparison Platform
+## Complete Redesign & Enhancement of Algorithm Heatmap Analyzer
 
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/Frontend-React%2019-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind%20CSS%20v4-38B2AC?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Scikit-Learn](https://img.shields.io/badge/ML-Scikit--Learn-F7931E?logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
 [![Google Gemini](https://img.shields.io/badge/AI-Google%20Gemini-8E75C2?logo=google&logoColor=white)](https://ai.google.dev/)
+[![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-An interactive full-stack benchmarking, visualization, and AI-driven complexity analysis platform for Design and Analysis of Algorithms (DAA). Benchmark algorithms in real-time across custom input sizes and dataset distributions, generate visual performance heatmaps, predict asymptotic Big-O bounds with machine learning regression, and receive educational insights powered by Google Gemini.
+A comprehensive academic analytics platform designed for students and educators in Design and Analysis of Algorithms (DAA). Students can submit custom algorithm source code developed by themselves in **Python, C, C++, Java, or JavaScript**, validate correctness against verified oracle references, benchmark performance under isolated sandbox limits against standard algorithms, fit empirical complexity curves, receive static AST evaluations, and get educational AI guidance.
 
 ---
 
 ## 🌟 Key Features
 
-- **⚡ Real-Time Multi-Metric Benchmarking**:
-  - Benchmark across execution time ($ms$), peak memory allocation ($bytes$), elementary operation counts, and maximum recursion depth.
-  - Test under multiple dataset conditions: *Random*, *Sorted (Best Case)*, *Reverse Sorted (Worst Case)*, and *Nearly Sorted*.
-- **🔥 Dynamic Complexity Heatmaps**:
-  - Visualize execution bottlenecks across algorithm combinations and input scales ($N = 10$ to $100,000+$).
-  - Highlighting performance gradients to instantly identify quadratic or exponential degradation.
-- **🎬 Interactive Algorithm Visualizer**:
-  - Step-by-step visual playback with speed control, step-through debugging, and state changes for sorting, searching, and graph traversals.
-- **📈 ML-Powered Big-O Complexity Prediction**:
-  - Uses curve-fitting regression models ($O(1)$, $O(\log n)$, $O(n)$, $O(n \log n)$, $O(n^2)$, $O(n^3)$, $O(2^n)$) to classify practical algorithmic complexity and extrapolate performance to massive scales ($10^5$, $10^6$).
-- **⚖️ Side-by-Side Algorithm Comparison**:
-  - Comparative analytics and synchronized Chart.js graphs for comparing execution time, memory footprints, and operation counts.
-- **🤖 Gemini AI Algorithm Assistant & Explainer**:
-  - In-depth theoretical breakdowns of empirical benchmark results compared against theoretical upper bounds.
-  - Interactive DAA chat tutor to ask questions, optimize custom implementations, and compare algorithmic strategies.
+### 1. 🧑‍💻 Student Algorithm Analyzer (Primary Module)
+- **Multi-Language Support**: Submit source code in **Python**, **C**, **C++**, **Java**, or **JavaScript (Node.js)**.
+- **Embedded Code Editor**: Built-in dark code editor with syntax indentation, line numbers, template loaders, and status indicators.
+- **Top Navigation Layout**: Streamlined, full-width top navigation bar with dark/light theme switching, live sandbox status, and responsive mobile menu.
+- **8 Core Platform Modules**:
+  1. **Dashboard**: High-level platform statistics, quick actions, and recent submission stream.
+  2. **Analyze My Algorithm**: Multi-language student code submission, correctness validation, sandbox benchmarking, quality rubric, and AI reports.
+  3. **Compare Algorithms**: Side-by-side synchronized comparison against standard reference algorithms with interactive metrics.
+  4. **Performance Heatmap**: Multi-dimensional matrix visualizing execution time, memory, and operations across input scales and dataset topologies.
+  5. **Complexity Analysis**: Empirical regression curve fitting across 8 Big-O classes alongside AST static structure analysis.
+  6. **Code Optimization**: Automated bottleneck detection, algorithmic explanations, refactored code generation, and benchmark diffs.
+  7. **Algorithm Visualizer**: Step-by-step visual execution of classical algorithms.
+  8. **AI Study Companion**: Interactive pedagogical assistant grounded in actual empirical benchmark data.
+- **Problem Categories**:
+  - **Sorting**: Bubble, Selection, Insertion, Merge, Quick, Heap Sort
+  - **Searching**: Linear Search, Binary Search
+  - **Graph Algorithms**: BFS, DFS, Dijkstra's Shortest Path, Topological Sort (Kahn's)
+  - **String Matching**: Naive String Match, KMP, Horspool, Boyer-Moore
+  - **Dynamic Programming & Backtracking**: 0/1 Knapsack, N-Queens
+
+### 2. 🛡️ Secure Isolated Sandbox
+- **Process Isolation**: Subprocess runs with dedicated session and process groups (`os.setsid`), preventing arbitrary shell attacks and process escapes.
+- **Resource Limits**: Strict CPU timeouts (`RLIMIT_CPU`), peak resident memory caps (`RLIMIT_AS`), file creation size limits (`RLIMIT_FSIZE`), and process forks (`RLIMIT_NPROC`).
+- **Zero Network Access**: Strips all external network access and isolates temporary working filesystems.
+- **Clean Environment**: Strips host secrets, API keys, and credentials before spawning student code.
+- **Process Group Termination**: Kills child processes and all descendant threads cleanly on timeout or error.
+
+### 3. ✅ Correctness Validation Engine
+- Verifies submitted student logic against problem-specific trusted reference oracles.
+- Rigorous test suite covering:
+  - Normal input
+  - Empty input (`[]` or `0`)
+  - Single-element input
+  - All duplicates / duplicate-heavy
+  - Already sorted (best-case)
+  - Reverse sorted (worst-case)
+  - Random arrays
+  - Negative numbers and boundary values
+  - Moderate / large scale stress cases
+- Distinguishes validated competitors from diagnostic failure runs.
+
+### 4. ⚡ Fair Synchronized Benchmarking Engine
+- Benchmarks student code and selected standard algorithms on **identical generated datasets**.
+- Datasets: *Random*, *Sorted*, *Reverse Sorted*, *Nearly Sorted*, *Duplicate-Heavy*, *Edge Cases*.
+- Dataset generation occurs **outside** the measured interval.
+- Separates compilation time (C, C++, Java) from pure runtime.
+- Multi-run warm-up executions with **median reporting and variance tracking**.
+
+### 5. 📈 Dual Complexity Analysis (Theoretical + Empirical)
+- **Theoretical AST Static Analysis**: Analyzes AST trees (Python) and lexical loop constructs (C/C++/Java/JS) to evaluate loop nesting depth, recursion branching factors, auxiliary space, and best/average/worst-case Big-O bounds.
+- **Empirical Regression Modeling**: Fits measured runtimes against 8 standard candidate complexity classes:
+  $$O(1), \quad O(\log n), \quad O(n), \quad O(n \log n), \quad O(n^2), \quad O(n^3), \quad O(2^n), \quad O(n!)$$
+- Computes $R^2$ goodness-of-fit, model residuals, and extrapolations ($10^5$, $10^6$).
+
+### 6. 🏆 Code Quality & Optimization Modules
+- **5-Dimension Quality Rubric (100 pts)**:
+  1. Readability & Structure (20 pts)
+  2. Naming Conventions (20 pts)
+  3. Algorithmic Efficiency & Loop Economy (20 pts)
+  4. Memory & Resource Discipline (20 pts)
+  5. Robustness & Edge-Case Safety (20 pts)
+- **Interactive Code Optimization**: Identifies algorithmic bottlenecks, suggests fixes, generates refactored code safely, and runs side-by-side benchmark diffs.
+
+### 7. 🤖 Gemini AI Educational Report (Sections A through K)
+Generates structured academic evaluations based strictly on backend measurements:
+- **A. Overall Summary**
+- **B. Correctness Explanation**
+- **C. Theoretical Complexity Explanation**
+- **D. Empirical Complexity Explanation**
+- **E. Performance Comparison**
+- **F. Strengths of Student Implementation**
+- **G. Weaknesses of Student Implementation**
+- **H. Inefficient Code Sections**
+- **I. Optimization Suggestions**
+- **J. Comparison with Standard Algorithms**
+- **K. Learning Recommendations**
+
+### 8. 💾 Persistence & Analysis History
+- Lightweight SQLite persistence layer (`analysis_history.db`).
+- Review past submissions, benchmark curves, and correctness scores.
+- One-click downloadable Markdown / PDF evaluation report.
 
 ---
 
-## 🧮 Supported Algorithms
-
-| Category | Algorithms |
-| :--- | :--- |
-| **Sorting** | Bubble Sort, Selection Sort, Insertion Sort, Merge Sort, Quick Sort, Heap Sort |
-| **Searching** | Linear Search, Binary Search |
-| **Graph** | Breadth-First Search (BFS), Depth-First Search (DFS), Dijkstra's Algorithm, Topological Sort |
-| **String Matching** | Naive Pattern Matching, Knuth-Morris-Pratt (KMP), Horspool, Boyer-Moore |
-| **Advanced / DP** | 0/1 Knapsack Problem, N-Queens Problem |
-
----
-
-## 🛠️ Architecture & Tech Stack
+## 🛠️ Architecture
 
 ```mermaid
 graph TD
-    UI[Frontend: React 19 + Vite + Tailwind CSS]
-    API[Backend: FastAPI REST API]
-    BENCH[Benchmarking & Tracing Engine]
-    ML[Scikit-Learn Regression & Extrapolation]
-    GEMINI[Google Gemini API]
+    UI[Frontend: React 19 + Tailwind CSS + Chart.js]
+    API[Backend: FastAPI REST API v2.0]
+    SANDBOX[Secure Sandbox: Subprocess Isolation + rlimits]
+    ORACLE[Correctness Engine: Reference Oracles & Test Suites]
+    BENCH[Fair Benchmarking Engine: Repeated Runs & Medians]
+    COMPLEXITY[Complexity Engine: AST Static + Empirical Regression]
+    QUALITY[Code Quality & Optimization Engine]
+    GEMINI[Google Gemini API / Structured Fallback]
+    DB[(SQLite: Analysis History)]
 
-    UI -->|HTTP /api/benchmark| API
-    UI -->|HTTP /api/predict| API
-    UI -->|HTTP /api/explain & /api/chat| API
+    UI -->|POST /api/student/analyze| API
+    API --> SANDBOX
+    API --> ORACLE
     API --> BENCH
-    API --> ML
+    API --> COMPLEXITY
+    API --> QUALITY
     API --> GEMINI
+    API --> DB
 ```
-
-- **Backend**:
-  - **FastAPI**: Asynchronous, high-performance Python REST API framework.
-  - **NumPy, Pandas, Scikit-learn**: Data manipulation, mathematical curve fitting, and asymptotic regression.
-  - **Google GenAI SDK**: Multi-turn educational AI dialogues and benchmark report generation.
-  - **psutil**: Process memory profiling and resource tracking.
-- **Frontend**:
-  - **React 19 & Vite**: Ultra-fast component rendering and hot module reloading.
-  - **Tailwind CSS v4**: Modern, responsive styling with dark-mode aesthetic.
-  - **Framer Motion**: Smooth page and component transitions.
-  - **Chart.js & React-Chartjs-2**: Interactive multi-metric performance graphs.
-  - **Lucide React**: Clean UI iconography.
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Start Guide
 
 ### Prerequisites
 - **Python**: `3.10` or higher
 - **Node.js**: `18.0` or higher (with `npm`)
-- **Google Gemini API Key**: Optional, required for AI analysis and chatbot features. Get one for free at [Google AI Studio](https://aistudio.google.com/).
+- **C / C++ Compiler**: `clang` / `gcc` (pre-installed on macOS/Linux)
+- **Java**: Optional JDK (`javac`/`java`)
 
 ---
 
 ### 1. Backend Setup
 
-1. Open a terminal and navigate to the `backend` directory:
+1. Open a terminal and navigate to the backend directory:
    ```bash
    cd backend
    ```
 
-2. Create and activate a Python virtual environment:
+2. Run the server using Python:
    ```bash
-   # On macOS / Linux:
-   python3 -m venv venv
-   source venv/bin/activate
-
-   # On Windows:
-   python -m venv venv
-   venv\Scripts\activate
+   PYTHONPATH=. python3 -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
    ```
 
-3. Install required Python packages:
+3. (Optional) Configure Gemini API key for live AI tutoring in `backend/.env`:
    ```bash
-   pip install -r requirements.txt
+   GEMINI_API_KEY=your_actual_api_key_here
    ```
-
-4. Configure environment variables:
-   ```bash
-   cp .env.example .env
-   ```
-   Edit `.env` to include your Gemini API key:
-   ```env
-   GEMINI_API_KEY=your_gemini_api_key_here
-   PORT=8000
-   HOST=127.0.0.1
-   ```
-
-5. Start the FastAPI backend server:
-   ```bash
-   uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
-   ```
-   *The backend API documentation is available at `http://127.0.0.1:8000/docs`.*
 
 ---
 
 ### 2. Frontend Setup
 
-1. Open a new terminal window and navigate to the `frontend` directory:
+1. Open a second terminal and navigate to the frontend directory:
    ```bash
    cd frontend
    ```
 
-2. Install Node dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the Vite development server:
+2. Start the Vite development server:
    ```bash
    npm run dev
    ```
 
-4. Open your browser and navigate to:
+3. Open your browser at:
    ```
    http://localhost:3000
    ```
 
 ---
 
-## 📡 API Overview
+## 🧪 Running Automated Tests
+
+Run the complete 17-point automated test suite:
+
+```bash
+cd backend
+PYTHONPATH=. python3 -m unittest tests/test_student_analyzer.py
+```
+
+Tests cover:
+- Multi-language execution (Python, C, C++, Java, JavaScript)
+- Compilation and syntax errors
+- Runtime exceptions and incorrect output detection
+- Infinite loops, timeouts, and process group terminations
+- Security sandbox policy enforcement
+- Correctness edge cases (empty, duplicates, bounds)
+- Static AST and empirical regression curve fitting
+- End-to-end REST API lifecycle and SQLite persistence
+
+---
+
+## 📡 REST API Reference
 
 | Endpoint | Method | Description |
 | :--- | :--- | :--- |
-| `/api/health` | `GET` | Health check to verify server status. |
-| `/api/benchmark` | `POST` | Executes real-time benchmarks for selected algorithms, dataset type, and input sizes. |
-| `/api/predict` | `POST` | Analyzes benchmark points and predicts Big-O complexity via curve-fitting regression. |
-| `/api/recommend` | `POST` | Returns recommended algorithm based on input distribution and scale constraints. |
-| `/api/explain` | `POST` | Generates a Gemini-powered performance analysis comparing empirical vs theoretical bounds. |
-| `/api/chat` | `POST` | Multi-turn algorithmic tutor and code review assistant. |
-
----
-
-## 🔒 Security & Environment Configuration
-
-- **API Keys & Secrets**:
-  - Never commit `.env` or files containing secret keys to Git.
-  - The repository includes a `.gitignore` configured to ignore `.env`, virtual environments (`venv/`), Python cache (`__pycache__/`), and `node_modules/`.
-  - Always use `backend/.env.example` as a template for new environments.
-  - In the frontend, custom Gemini API keys can also be supplied per-session in the UI without exposing server credentials.
-
----
-
-## 📂 Project Structure
-
-```
-algorithm-heatmap-analyzer/
-├── backend/
-│   ├── app/
-│   │   ├── __init__.py
-│   │   ├── ai_prediction.py       # ML regression models & asymptotic curve fitting
-│   │   ├── algorithms.py          # Implementations & instrumentation of all algorithms
-│   │   ├── benchmark.py           # Timing, memory profiling & counter harnesses
-│   │   ├── gemini_service.py      # Google GenAI integration for reports & chat
-│   │   └── main.py                # FastAPI endpoints & route validation
-│   ├── .env.example               # Template environment configuration
-│   └── requirements.txt           # Python dependencies
-├── frontend/
-│   ├── public/                    # Static assets & icons
-│   ├── src/
-│   │   ├── assets/                # Images & vector graphics
-│   │   ├── pages/                 # Dashboard views (Benchmarking, Heatmap, Visualizer, etc.)
-│   │   ├── services/              # API communication layer
-│   │   ├── App.jsx                # Core router & navigation layout
-│   │   ├── index.css              # Global styles & Tailwind configuration
-│   │   └── main.jsx               # React entry point
-│   ├── package.json               # Frontend dependencies & scripts
-│   └── vite.config.js             # Vite configuration with backend proxy
-├── .gitignore                     # Git ignore rules for root, backend, and frontend
-└── README.md                      # Comprehensive project documentation
-```
-
----
-
-## 👨‍💻 Author
-
-**Arnav Bansal**
-- GitHub: [@arnav-bansal-20](https://github.com/arnav-bansal-20)
+| `/api/student/algorithms` | GET | Catalog of categories and standard algorithms |
+| `/api/student/validate` | POST | Correctness verification across test cases |
+| `/api/student/benchmark` | POST | Sandboxed benchmarking across input sizes |
+| `/api/student/compare` | POST | Fair synchronized benchmark with standard algorithms |
+| `/api/student/complexity` | POST | AST static analysis + empirical curve fitting |
+| `/api/student/quality` | POST | Code quality rubric evaluation |
+| `/api/student/optimize` | POST | Bottleneck identification & refactoring |
+| `/api/student/analyze` | POST | Complete analysis lifecycle |
+| `/api/student/history` | GET | Retrieves past student submissions |
+| `/api/student/analysis/{id}` | GET | Fetches specific analysis details |
+| `/api/student/report/{id}` | GET | Downloadable analysis evaluation report |
 
 ---
 
 ## 📜 License
-
-This project is licensed under the MIT License.
+Distributed under the MIT License.

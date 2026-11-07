@@ -148,5 +148,172 @@ export const api = {
       console.error('AI chat failed:', error);
       throw error;
     }
+  },
+
+  /**
+   * Fetches supported algorithm catalog by category.
+   */
+  async getSupportedAlgorithms() {
+    try {
+      const response = await fetch('/api/student/algorithms');
+      if (!response.ok) throw new Error('Failed to fetch algorithm catalog');
+      return await response.json();
+    } catch (error) {
+      console.error('Failed to get algorithm catalog:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Validates student code correctness across boundary and edge test suites.
+   */
+  async validateStudentAlgorithm(language, code, category) {
+    try {
+      const response = await fetch('/api/student/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language, code, category })
+      });
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.detail || 'Validation failed');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Validation request failed:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Benchmarks student algorithm against selected standard algorithms.
+   */
+  async compareStudentAlgorithm(language, code, category, standardAlgorithms, datasetType = 'random', sizes = [10, 100, 1000]) {
+    try {
+      const response = await fetch('/api/student/compare', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          language,
+          code,
+          category,
+          standard_algorithms: standardAlgorithms,
+          dataset_type: datasetType,
+          sizes
+        })
+      });
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.detail || 'Comparison benchmark failed');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Comparison benchmark failed:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Performs theoretical AST static analysis and empirical curve fitting.
+   */
+  async analyzeStudentComplexity(language, code, category, benchmarks = null) {
+    try {
+      const response = await fetch('/api/student/complexity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language, code, category, benchmarks })
+      });
+      if (!response.ok) throw new Error('Complexity analysis failed');
+      return await response.json();
+    } catch (error) {
+      console.error('Complexity analysis failed:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Evaluates student code quality using standardized rubric.
+   */
+  async analyzeStudentQuality(language, code, category) {
+    try {
+      const response = await fetch('/api/student/quality', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language, code, category })
+      });
+      if (!response.ok) throw new Error('Quality analysis failed');
+      return await response.json();
+    } catch (error) {
+      console.error('Quality analysis failed:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Generates safe code optimization recommendations.
+   */
+  async optimizeStudentCode(language, code, category) {
+    try {
+      const response = await fetch('/api/student/optimize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ language, code, category })
+      });
+      if (!response.ok) throw new Error('Optimization request failed');
+      return await response.json();
+    } catch (error) {
+      console.error('Optimization request failed:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Executes the full student analysis lifecycle:
+   * Correctness -> Fair Benchmark -> Complexity -> Quality -> Optimization -> AI Report -> Persistence.
+   */
+  async runFullStudentAnalysis(payload) {
+    try {
+      const response = await fetch('/api/student/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.detail || 'Full analysis lifecycle failed');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Full analysis failed:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Retrieves past student submission history.
+   */
+  async getStudentHistory(limit = 20) {
+    try {
+      const response = await fetch(`/api/student/history?limit=${limit}`);
+      if (!response.ok) throw new Error('Failed to fetch history');
+      return await response.json();
+    } catch (error) {
+      console.error('History fetch failed:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Fetches specific analysis by ID.
+   */
+  async getStudentAnalysis(analysisId) {
+    try {
+      const response = await fetch(`/api/student/analysis/${analysisId}`);
+      if (!response.ok) throw new Error('Analysis record not found');
+      return await response.json();
+    } catch (error) {
+      console.error('Failed to get analysis details:', error);
+      throw error;
+    }
   }
 };

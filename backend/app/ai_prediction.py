@@ -1,81 +1,18 @@
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import LinearRegression
 from typing import Dict, Any, List
+from app.complexity.empirical_analyzer import EmpiricalComplexityAnalyzer
+from app.complexity.static_analyzer import StaticComplexityAnalyzer
 
 # 1. Complexity Classification & Extrapolation
 
 def analyze_complexity(sizes: List[int], values: List[float]) -> Dict[str, Any]:
     """
-    Fits sizes and values (runtimes or operations) to regression models for:
-    - O(log N)
-    - O(N)
-    - O(N log N)
-    - O(N^2)
-    Returns the best fitting class, R^2 scores, and regression coefficients.
+    Fits sizes and values to regression models across candidate classes:
+    O(1), O(log n), O(n), O(n log n), O(n²), O(n³), O(2^n), O(n!).
+    Returns the best fitting class, R^2 scores, model residuals, and fitted curve.
     """
-    if len(sizes) < 3 or any(v is None for v in values):
-        return {
-            "predicted_class": "Insufficient Data",
-            "confidence": 0.0,
-            "fits": {}
-        }
-        
-    X_val = np.array(sizes, dtype=float)
-    y_val = np.array(values, dtype=float)
-    
-    # Avoid log(0)
-    X_val = np.where(X_val <= 0, 1, X_val)
-    
-    # Define features
-    features = {
-        "O(log n)": np.log2(X_val).reshape(-1, 1),
-        "O(n)": X_val.reshape(-1, 1),
-        "O(n log n)": (X_val * np.log2(X_val)).reshape(-1, 1),
-        "O(n²)": (X_val ** 2).reshape(-1, 1)
-    }
-    
-    fits = {}
-    best_class = None
-    best_r2 = -float('inf')
-    best_coef = 0.0
-    best_intercept = 0.0
-    
-    for class_name, X in features.items():
-        try:
-            model = LinearRegression(fit_intercept=True)
-            model.fit(X, y_val)
-            r2 = model.score(X, y_val)
-            
-            # Penalize negative coefficients if N increases but time decreases (anomalous)
-            # though for operations/time it should generally be positive
-            coef = model.coef_[0]
-            intercept = model.intercept_
-            
-            fits[class_name] = {
-                "r2": max(0.0, round(r2, 4)),
-                "coef": float(coef),
-                "intercept": float(intercept)
-            }
-            
-            if r2 > best_r2:
-                best_r2 = r2
-                best_class = class_name
-                best_coef = float(coef)
-                best_intercept = float(intercept)
-        except Exception:
-            fits[class_name] = {"r2": 0.0, "coef": 0.0, "intercept": 0.0}
-            
-    # Determine confidence
-    confidence = max(0.0, min(1.0, best_r2))
-    
-    return {
-        "predicted_class": best_class if best_class else "Unknown",
-        "confidence": round(confidence, 4),
-        "coef": best_coef,
-        "intercept": best_intercept,
-        "fits": fits
-    }
+    return EmpiricalComplexityAnalyzer.fit_complexity(sizes, values)
 
 
 def extrapolate_performance(size: int, complexity_class: str, coef: float, intercept: float) -> float:

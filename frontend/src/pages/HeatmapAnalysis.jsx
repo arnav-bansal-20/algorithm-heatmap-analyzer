@@ -27,6 +27,7 @@ ChartJS.register(
 );
 
 const ALGO_NAMES = {
+  "Student Algorithm": "★ My Algorithm (Student)",
   "bubble_sort": "Bubble Sort",
   "selection_sort": "Selection Sort",
   "insertion_sort": "Insertion Sort",
@@ -47,44 +48,47 @@ const ALGO_NAMES = {
   "n_queens": "N-Queens (Backtracking)"
 };
 
-export default function HeatmapAnalysis({ benchmarkData }) {
+export default function HeatmapAnalysis({ benchmarkData = [], studentAnalysis = null }) {
+  const studentRuns = studentAnalysis?.benchmarks?.results || [];
+  const activeBenchmarkData = [...benchmarkData, ...studentRuns];
+
   const [viewMode, setViewMode] = useState('heatmap'); // heatmap | line | bar
   const [scalingMode, setScalingMode] = useState('relative'); // relative (column) | absolute (raw log scale)
-  const [selectedBarSize, setSelectedBarSize] = useState(1000);
+  const [selectedBarSize, setSelectedBarSize] = useState(100);
 
   const isLight = typeof document !== 'undefined' && document.documentElement.classList.contains('light');
   const textColor = isLight ? '#475569' : '#94a3b8';
   const gridColor = isLight ? 'rgba(226, 232, 240, 0.8)' : 'rgba(255, 255, 255, 0.06)';
 
-  if (benchmarkData.length === 0) {
+  if (activeBenchmarkData.length === 0) {
     return (
       <div className="page-transition glass-card rounded-2xl p-12 text-center text-[var(--text-secondary)] space-y-4">
         <AlertCircle className="w-12 h-12 text-[var(--text-secondary)] mx-auto animate-bounce" />
         <h3 className="text-xl font-bold text-[var(--text-primary)]">No Benchmark Data Found</h3>
         <p className="max-w-md mx-auto text-sm text-[var(--text-secondary)]">
-          Please run benchmarks first on the <b>Benchmarking</b> page. Runtimes, operations, and memory telemetry will automatically populate this heatmap page.
+          Please run an analysis first on the <b>Analyze My Algorithm</b> page. Runtimes, operations, and memory telemetry will automatically populate this heatmap page.
         </p>
       </div>
     );
   }
 
   // Extract unique algorithms and sizes present in the dataset
-  const algos = [...new Set(benchmarkData.map(d => d.algorithm))];
-  const sizes = [...new Set(benchmarkData.map(d => d.size))].sort((a, b) => a - b);
-  const datasetType = benchmarkData[0]?.dataset_type || 'random';
+  const algos = [...new Set(activeBenchmarkData.map(d => d.algorithm))];
+  const sizes = [...new Set(activeBenchmarkData.map(d => d.size))].sort((a, b) => a - b);
+  const datasetType = activeBenchmarkData[0]?.dataset_type || 'random';
 
   // Ensure default selected size exists in the benchmarks
   const currentSelectedSize = sizes.includes(selectedBarSize) ? selectedBarSize : sizes[0];
 
   // Helper to get benchmark value for cell
   const getCellData = (algo, size) => {
-    return benchmarkData.find(d => d.algorithm === algo && d.size === size);
+    return activeBenchmarkData.find(d => d.algorithm === algo && d.size === size);
   };
 
   // Find min/max per column (size) for relative scaling
   const columnLimits = {};
   sizes.forEach(size => {
-    const times = benchmarkData
+    const times = activeBenchmarkData
       .filter(d => d.size === size && d.time_ms !== null && d.status !== 'skipped')
       .map(d => d.time_ms);
     if (times.length > 0) {
@@ -203,7 +207,7 @@ export default function HeatmapAnalysis({ benchmarkData }) {
     let csvContent = "data:text/csv;charset=utf-8,";
     csvContent += "Algorithm,Input Size,Time (ms),Operations,Memory (bytes),Status\n";
     
-    benchmarkData.forEach(row => {
+    activeBenchmarkData.forEach(row => {
       csvContent += `"${ALGO_NAMES[row.algorithm] || row.algorithm}",${row.size},${row.time_ms !== null ? row.time_ms : ""},${row.operations !== null ? row.operations : ""},${row.memory_bytes !== null ? row.memory_bytes : ""},"${row.status}"\n`;
     });
 

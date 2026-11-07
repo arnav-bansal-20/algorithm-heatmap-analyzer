@@ -4,6 +4,7 @@ import { Line } from 'react-chartjs-2';
 import { api } from '../services/api';
 
 const ALGO_DISPLAY_NAMES = {
+  "Student Algorithm": "★ My Algorithm (Student)",
   "bubble_sort": "Bubble Sort",
   "selection_sort": "Selection Sort",
   "insertion_sort": "Insertion Sort",
@@ -18,6 +19,7 @@ const ALGO_DISPLAY_NAMES = {
   "topological_sort": "Topological Sort",
   "naive_pattern_matching": "Naive Match",
   "kmp_search": "KMP",
+  "horspool_search": "Horspool",
   "boyer_moore_search": "Boyer-Moore",
   "knapsack": "0/1 Knapsack (DP)",
   "n_queens": "N-Queens (Backtracking)"
@@ -35,14 +37,14 @@ const ALGO_BY_CATEGORY = {
   "sorting": ["bubble_sort", "selection_sort", "insertion_sort", "merge_sort", "quick_sort", "heap_sort"],
   "searching": ["linear_search", "binary_search"],
   "graph": ["bfs", "dfs", "dijkstra", "topological_sort"],
-  "string": ["naive_pattern_matching", "kmp_search", "boyer_moore_search"],
+  "string": ["naive_pattern_matching", "kmp_search", "horspool_search", "boyer_moore_search"],
   "advanced": ["knapsack", "n_queens"]
 };
 
-export default function AlgorithmComparison({ benchmarkData }) {
-  const [selectedCategory, setSelectedCategory] = useState('sorting');
+export default function AlgorithmComparison({ benchmarkData = [], studentAnalysis = null }) {
+  const [selectedCategory, setSelectedCategory] = useState(() => studentAnalysis?.category || 'sorting');
   const [metricTab, setMetricTab] = useState('time_ms'); // time_ms | operations | memory
-  const [leaderboardSize, setLeaderboardSize] = useState(1000);
+  const [leaderboardSize, setLeaderboardSize] = useState(100);
   
   // Recommender states
   const [recSize, setRecSize] = useState(1000);
@@ -51,9 +53,14 @@ export default function AlgorithmComparison({ benchmarkData }) {
   const [recommendation, setRecommendation] = useState(null);
   const [isRecLoading, setIsRecLoading] = useState(false);
 
+  // Combine benchmarkData with studentAnalysis benchmarks if present
+  const studentRuns = studentAnalysis?.benchmarks?.results || [];
+  const combinedData = [...benchmarkData, ...studentRuns];
+
   // Filter benchmark data for the selected category
-  const catAlgos = ALGO_BY_CATEGORY[selectedCategory];
-  const catRuns = benchmarkData.filter(d => catAlgos.includes(d.algorithm));
+  const baseCatAlgos = ALGO_BY_CATEGORY[selectedCategory] || [];
+  const catAlgos = studentRuns.length > 0 ? [...baseCatAlgos, "Student Algorithm"] : baseCatAlgos;
+  const catRuns = combinedData.filter(d => catAlgos.includes(d.algorithm));
   const sizes = [...new Set(catRuns.map(d => d.size))].sort((a, b) => a - b);
   const availableAlgos = [...new Set(catRuns.map(d => d.algorithm))];
 
@@ -80,14 +87,16 @@ export default function AlgorithmComparison({ benchmarkData }) {
     getRecommendation();
   }, [selectedCategory, recSize, recDataset, recMemory]);
 
-  if (benchmarkData.length === 0) {
+  if (combinedData.length === 0) {
     return (
-      <div className="page-transition glass-card rounded-2xl p-12 text-center text-[var(--text-secondary)] space-y-4">
-        <AlertCircle className="w-12 h-12 text-[var(--text-secondary)] mx-auto animate-bounce" />
-        <h3 className="text-xl font-bold text-[var(--text-primary)]">No Benchmark Data Found</h3>
-        <p className="max-w-md mx-auto text-sm text-[var(--text-secondary)]">
-          Please run benchmarks first on the <b>Benchmarking</b> page. Leaderboards, charts, and metrics are populated after running simulations.
-        </p>
+      <div className="max-w-4xl mx-auto py-12 px-4 text-center space-y-6">
+        <div className="glass-card rounded-3xl p-12 text-center text-[var(--text-secondary)] space-y-4">
+          <AlertCircle className="w-12 h-12 text-indigo-400 mx-auto" />
+          <h3 className="text-xl font-bold text-[var(--text-primary)]">No Benchmark Telemetry Available Yet</h3>
+          <p className="max-w-md mx-auto text-xs text-[var(--text-secondary)] leading-relaxed">
+            Analyze your own algorithm on the <strong>Analyze My Algorithm</strong> page to benchmark and stream multi-algorithm telemetry into this comparison dashboard.
+          </p>
+        </div>
       </div>
     );
   }

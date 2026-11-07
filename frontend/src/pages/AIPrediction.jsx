@@ -4,6 +4,7 @@ import { Line } from 'react-chartjs-2';
 import { api } from '../services/api';
 
 const ALGO_DISPLAY_NAMES = {
+  "Student Algorithm": "★ My Algorithm (Student)",
   "bubble_sort": "Bubble Sort",
   "selection_sort": "Selection Sort",
   "insertion_sort": "Insertion Sort",
@@ -24,6 +25,7 @@ const ALGO_DISPLAY_NAMES = {
 };
 
 const ALGO_CATEGORIES = {
+  "Student Algorithm": "sorting",
   "bubble_sort": "sorting", "selection_sort": "sorting", "insertion_sort": "sorting", 
   "merge_sort": "sorting", "quick_sort": "sorting", "heap_sort": "sorting",
   "linear_search": "searching", "binary_search": "searching",
@@ -223,20 +225,23 @@ export function parseMarkdownToHtml(markdown) {
   return html;
 }
 
-export default function AIPrediction({ benchmarkData }) {
-  const [selectedAlgo, setSelectedAlgo] = useState('');
+export default function AIPrediction({ benchmarkData = [], studentAnalysis = null }) {
+  const studentRuns = studentAnalysis?.benchmarks?.results || [];
+  const activeBenchmarkData = [...benchmarkData, ...studentRuns];
+
+  const [selectedAlgo, setSelectedAlgo] = useState(() => studentRuns.length > 0 ? 'Student Algorithm' : '');
   const [predictionData, setPredictionData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [analysisExplanation, setAnalysisExplanation] = useState('');
   const [isAnalysisLoading, setIsAnalysisLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [analysisMode, setAnalysisMode] = useState('operations'); // 'operations' | 'time'
+  const [analysisMode, setAnalysisMode] = useState('time'); // 'operations' | 'time'
 
   const isOps = analysisMode === 'operations' && predictionData?.operations_complexity_analysis;
   const activeAnalysis = isOps ? predictionData.operations_complexity_analysis : (predictionData?.time_complexity_analysis || null);
 
   // Extract unique algorithms from benchmark data
-  const availableAlgos = [...new Set(benchmarkData.map(d => d.algorithm))];
+  const availableAlgos = [...new Set(activeBenchmarkData.map(d => d.algorithm))];
 
   useEffect(() => {
     if (availableAlgos.length > 0 && !selectedAlgo) {
@@ -256,7 +261,7 @@ export default function AIPrediction({ benchmarkData }) {
     setErrorMessage('');
     
     // Filter actual runs for this algorithm
-    const algoRuns = benchmarkData.filter(
+    const algoRuns = activeBenchmarkData.filter(
       d => d.algorithm === selectedAlgo && d.time_ms !== null && d.status !== 'skipped'
     );
 
@@ -287,7 +292,7 @@ export default function AIPrediction({ benchmarkData }) {
     if (!predictionData || !selectedAlgo) return;
     setIsAnalysisLoading(true);
     
-    const algoRuns = benchmarkData.filter(d => d.algorithm === selectedAlgo && d.time_ms !== null);
+    const algoRuns = activeBenchmarkData.filter(d => d.algorithm === selectedAlgo && d.time_ms !== null);
     const largestRun = algoRuns.reduce((prev, current) => (prev.size > current.size) ? prev : current, algoRuns[0]);
 
     const payload = {
@@ -312,13 +317,13 @@ export default function AIPrediction({ benchmarkData }) {
     }
   };
 
-  if (benchmarkData.length === 0) {
+  if (activeBenchmarkData.length === 0) {
     return (
       <div className="page-transition glass-card rounded-2xl p-12 text-center text-[var(--text-secondary)] space-y-4">
         <AlertCircle className="w-12 h-12 text-[var(--text-secondary)] mx-auto animate-bounce" />
         <h3 className="text-xl font-bold text-[var(--text-primary)]">No Benchmark Data Found</h3>
         <p className="max-w-md mx-auto text-sm text-[var(--text-secondary)]">
-          Run benchmarks first on the <b>Benchmarking</b> page. Regression models and curve analysis require active telemetry data.
+          Run benchmarks first on the <b>Analyze My Algorithm</b> page. Regression models and curve analysis require active telemetry data.
         </p>
       </div>
     );
@@ -328,7 +333,7 @@ export default function AIPrediction({ benchmarkData }) {
   const renderChart = () => {
     if (!predictionData) return null;
     
-    const algoRuns = benchmarkData.filter(
+    const algoRuns = activeBenchmarkData.filter(
       d => d.algorithm === selectedAlgo && d.time_ms !== null && d.status !== 'skipped'
     ).sort((a, b) => a.size - b.size);
     
